@@ -136,4 +136,4 @@ google:
 theme: jekyll-theme-slate
 #gems: jekyll-mermaid
 mermaid:
-  src: {{ site.url }}/assets/js/mermaid.min.js
+  src: /assets/js/mermaid.min.js
