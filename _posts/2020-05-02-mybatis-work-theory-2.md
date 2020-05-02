@@ -28,9 +28,10 @@ sequenceDiagram
   XMLConfigBuilder->>XMLConfigBuilder: parse()
   XMLConfigBuilder->>Configuration: parseConfiguration(XNode root)
   Configuration->>Configuration: setVariables()
-  Configuration-->>XMLConfigBuilder: return
+  Configuration-->>XMLConfigBuilder: return void
   XMLConfigBuilder->>Configuration: settingsAsProperties("settings")
   Configuration->>Configuration: metaConfig.hasSetter()
+  Configuration-->>XMLConfigBuilder: return properties
   XMLConfigBuilder->>XMLConfigBuilder: loadCustomVfs(settings)
   XMLConfigBuilder->>XMLConfigBuilder: loadCustomLogImpl(settings)
   XMLConfigBuilder->>XMLConfigBuilder: typeAliasesElement("typeAliases")
