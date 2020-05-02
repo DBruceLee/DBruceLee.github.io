@@ -134,6 +134,6 @@ google:
         content_footer: false
 
 theme: jekyll-theme-slate
-gems: [jekyll-mermaid]
+#gems: jekyll-mermaid
 mermaid:
-  src: /Path/To/mermaid.min.js
+  src: /Path/To/assets/js/mermaid.min.js
