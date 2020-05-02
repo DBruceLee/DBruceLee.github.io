@@ -6,7 +6,7 @@ description:  mybatis 体系结构与工作原理（下）
 keywords: mybatis、theory
 ---
 
-### 体系结构（下）
+### mybatis 体系结构与工作原理（下）
 
 
 
@@ -19,8 +19,9 @@ keywords: mybatis、theory
 
 
 
-<script src="/assets/js/mermaid.min.js"></script>
-<div class="mermaid">
+**SqlSessionFactoryBuilder().build(stream)**
+
+```mermaid
 sequenceDiagram
   SqlSessionFactory->>SqlSessionFactoryBuilder: bulid
   SqlSessionFactoryBuilder->>XMLConfigBuilder: bulid
@@ -64,38 +65,33 @@ sequenceDiagram
  XMLConfigBuilder-->>SqlSessionFactoryBuilder: return Configuration
  SqlSessionFactoryBuilder->>SqlSessionFactoryBuilder: build(Configuration config)
  SqlSessionFactoryBuilder-->>SqlSessionFactory: return DefaultSqlSessionFactory
-</div>
+```
 
-<div class="mermaid">
-sequenceDiagram
-    sqlSessionFactory->>sqlSessionFactory: openSession
-    sqlSessionFactory->>DefaultSqlSessionFactory: openSession
-    DefaultSqlSessionFactory->>DefaultSqlSessionFactory: openSessionFromDataSource
-    DefaultSqlSessionFactory->>Configuration: getEnvironment()
-    Configuration-->>DefaultSqlSessionFactory: return Environment
-    DefaultSqlSessionFactory->>DefaultSqlSessionFactory: getTransactionFactoryFromEnvironment(environment)
-    DefaultSqlSessionFactory->>DefaultSqlSessionFactory: transactionFactory.newTransaction(environment.getDataSource(), level, autoCommit)
-    DefaultSqlSessionFactory->>Configuration: newExecutor(tx, execType)
-    alt is BATCH
-    Configuration-->>DefaultSqlSessionFactory: return BatchExecutor
-    else is REUSE
-    Configuration-->>DefaultSqlSessionFactory: return ReuseExecutor
-    else is SIMPLE
-    Configuration-->>DefaultSqlSessionFactory: return SimpleExecutor
-    end
-    alt is cacheEnabled
-    Configuration-->>DefaultSqlSessionFactory: return CachingExecutor
-    else is not cacheEnabled
-    Configuration-->>DefaultSqlSessionFactory: return SimpleExecutor
-    end
-    DefaultSqlSessionFactory->>sqlSessionFactory: return DefaultSqlSession
-</div>
+**sqlSessionFactory.openSession**
 
-<div class="mermaid">
+```mermaid
 sequenceDiagram
-    A->>B: Query
-    B->>C: Forward query
-    Note right of C: Thinking...
-    C->>B: Response
-    B->>A: Forward response
-</div>
+sqlSessionFactory->>sqlSessionFactory: openSession
+sqlSessionFactory->>DefaultSqlSessionFactory: openSession
+DefaultSqlSessionFactory->>DefaultSqlSessionFactory: openSessionFromDataSource
+DefaultSqlSessionFactory->>Configuration: getEnvironment()
+Configuration-->>DefaultSqlSessionFactory: return Environment
+DefaultSqlSessionFactory->>DefaultSqlSessionFactory: getTransactionFactoryFromEnvironment(environment)
+DefaultSqlSessionFactory->>DefaultSqlSessionFactory: transactionFactory.newTransaction(environment.getDataSource(), level, autoCommit)
+DefaultSqlSessionFactory->>Configuration: newExecutor(tx, execType)
+alt is BATCH
+Configuration-->>DefaultSqlSessionFactory: return BatchExecutor
+else is REUSE
+Configuration-->>DefaultSqlSessionFactory: return ReuseExecutor
+else is SIMPLE
+Configuration-->>DefaultSqlSessionFactory: return SimpleExecutor
+end
+alt is cacheEnabled
+Configuration-->>DefaultSqlSessionFactory: return CachingExecutor
+else is not cacheEnabled
+Configuration-->>DefaultSqlSessionFactory: return SimpleExecutor
+end
+DefaultSqlSessionFactory->>sqlSessionFactory: return DefaultSqlSession
+
+```
+

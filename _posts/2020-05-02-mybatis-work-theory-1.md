@@ -47,7 +47,7 @@ keywords: theory、mybatis
    >
    > 反射
 
-### 一级缓存
+#### 一级缓存
 
 一、作用域与维护对象
 
@@ -60,7 +60,7 @@ keywords: theory、mybatis
 
 
 
-### 二级缓存
+#### 二级缓存
 
 一、作用域与维护对象
 
@@ -80,7 +80,7 @@ keywords: theory、mybatis
 ```
 
 
-### 一级缓存写入删除流程
+#### 一级缓存写入删除流程
 
 
 <script src="/assets/js/mermaid.min.js"></script>
@@ -103,7 +103,7 @@ A(sqlSession.selectOne)-->B[DefaultSqlSession.selectOne]
 
 **删除其实调用的就是修改方法**
 
-### 一级缓存的清除策略
+#### 一级缓存的清除策略
 
 > LRU（最近最少使用）
 >
