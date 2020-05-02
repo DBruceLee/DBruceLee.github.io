@@ -31,7 +31,6 @@ sequenceDiagram
   Configuration-->>XMLConfigBuilder: return
   XMLConfigBuilder->>Configuration: settingsAsProperties("settings")
   Configuration->>Configuration: metaConfig.hasSetter()
-  Configuration-->>XMLConfigBuilder: return Properties
   XMLConfigBuilder->>XMLConfigBuilder: loadCustomVfs(settings)
   XMLConfigBuilder->>XMLConfigBuilder: loadCustomLogImpl(settings)
   XMLConfigBuilder->>XMLConfigBuilder: typeAliasesElement("typeAliases")
