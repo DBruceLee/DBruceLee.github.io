@@ -134,3 +134,6 @@ google:
         content_footer: false
 
 theme: jekyll-theme-slate
+gems: [jekyll-mermaid]
+mermaid:
+  src: 'path/to/mermaid.js'
