@@ -6,11 +6,11 @@ description:  mybatis 体系结构与工作原理（下）
 keywords: mybatis、theory
 ---
 
-# mybatis 体系结构与工作原理（下）
+### 体系结构（下）
 
 
 
-### 涉及到的GoF设计模式有哪些？
+#### 涉及到的GoF设计模式有哪些？
 
 1. 装饰器
 2. 模板方法
@@ -21,7 +21,8 @@ keywords: mybatis、theory
 
 **SqlSessionFactoryBuilder().build(stream)**
 
-```mermaid
+<script src="/assets/js/mermaid.min.js"></script>
+<div class="mermaid">
 sequenceDiagram
   SqlSessionFactory->>SqlSessionFactoryBuilder: bulid
   SqlSessionFactoryBuilder->>XMLConfigBuilder: bulid
@@ -65,11 +66,11 @@ sequenceDiagram
  XMLConfigBuilder-->>SqlSessionFactoryBuilder: return Configuration
  SqlSessionFactoryBuilder->>SqlSessionFactoryBuilder: build(Configuration config)
  SqlSessionFactoryBuilder-->>SqlSessionFactory: return DefaultSqlSessionFactory
-```
+</div>
 
 **sqlSessionFactory.openSession**
-
-```mermaid
+<script src="/assets/js/mermaid.min.js"></script>
+<div class="mermaid">
 sequenceDiagram
 sqlSessionFactory->>sqlSessionFactory: openSession
 sqlSessionFactory->>DefaultSqlSessionFactory: openSession
@@ -92,6 +93,5 @@ else is not cacheEnabled
 Configuration-->>DefaultSqlSessionFactory: return SimpleExecutor
 end
 DefaultSqlSessionFactory->>sqlSessionFactory: return DefaultSqlSession
-
-```
+</div>
 

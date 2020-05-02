@@ -6,18 +6,18 @@ description:  mybatis 体系结构与工作原理（上）
 keywords: theory、mybatis
 ---
 
-# mybatis 体系结构与工作原理（上）
+#### 体系结构（上）
 
 
 
-### 主要工作流程
+#### 主要工作流程
 
 1. 解析配置文件
 2. 创建工厂类
 3. 创建会话
 4. 通过会话操作数据库
 
-### 架构分层
+#### 架构分层
 
 1. 提供给应用使用：接口层 sqlSession
 
@@ -73,8 +73,6 @@ keywords: theory、mybatis
    ---> Map<Cache, TransactionlCache>
    ```
 
-   
-
 二、和一级缓存的工作顺序
 
 ```txt
@@ -82,14 +80,11 @@ keywords: theory、mybatis
 ```
 
 
-
-
-
 ### 一级缓存写入删除流程
 
 
-
-```mermaid
+<script src="/assets/js/mermaid.min.js"></script>
+<div class="mermaid">
 graph TB
 A(sqlSession.selectOne)-->B[DefaultSqlSession.selectOne]
 	B-->C[this.selectList]
@@ -102,10 +97,7 @@ A(sqlSession.selectOne)-->B[DefaultSqlSession.selectOne]
 	I-->J[将数据写入缓存]
 	J-->K[返回数据]
 	H-->K
-	
-	
-    
-```
+</div>
 
 **每次增删改的时候，会清除一级缓存**
 
