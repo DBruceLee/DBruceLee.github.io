@@ -97,9 +97,9 @@ sequenceDiagram
 
 <div class="mermaid">
 sequenceDiagram
-    A->> B: Query
-    B->> C: Forward query
+    A->>B: Query
+    B->>C: Forward query
     Note right of C: Thinking...
-    C->> B: Response
-    B->> A: Forward response
+    C->>B: Response
+    B->>A: Forward response
 </div>
