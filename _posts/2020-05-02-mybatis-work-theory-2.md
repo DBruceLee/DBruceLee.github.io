@@ -46,52 +46,60 @@ sequenceDiagram
   XMLConfigBuilder->>Configuration: environmentsElement("environments")
   Configuration->>Configuration: configuration.setEnvironment()
   Configuration-->>XMLConfigBuilder: return
- XMLConfigBuilder->>XMLConfigBuilder: databaseIdProviderElement("databaseIdProvider")
- XMLConfigBuilder->>XMLConfigBuilder: typeHandlerElement("typeHandlers")
- alt is package
- XMLConfigBuilder->>XMLConfigBuilder: typeHandlerRegistry.register(typeHandlerPackage)
- else is class
- XMLConfigBuilder->>XMLConfigBuilder: typeHandlerRegistry.register(typeHandlerClass)
- end
- XMLConfigBuilder->>XMLConfigBuilder: mapperElement(XNode parent)
- alt is package
- XMLConfigBuilder->>XMLConfigBuilder: configuration.addMappers(mapperPackage)
- else is resource
- XMLConfigBuilder->>XMLConfigBuilder: XMLMapperBuilder(resource) 
- else is url
- XMLConfigBuilder->>XMLConfigBuilder: XMLMapperBuilder(url) 
- else is class
- XMLConfigBuilder->>XMLConfigBuilder: configuration.addMapper(mapperInterface)
- end
- XMLConfigBuilder-->>SqlSessionFactoryBuilder: return Configuration
- SqlSessionFactoryBuilder->>SqlSessionFactoryBuilder: build(Configuration config)
- SqlSessionFactoryBuilder-->>SqlSessionFactory: return DefaultSqlSessionFactory
+     XMLConfigBuilder->>XMLConfigBuilder: databaseIdProviderElement("databaseIdProvider")
+     XMLConfigBuilder->>XMLConfigBuilder: typeHandlerElement("typeHandlers")
+     alt is package
+     XMLConfigBuilder->>XMLConfigBuilder: typeHandlerRegistry.register(typeHandlerPackage)
+     else is class
+     XMLConfigBuilder->>XMLConfigBuilder: typeHandlerRegistry.register(typeHandlerClass)
+     end
+     XMLConfigBuilder->>XMLConfigBuilder: mapperElement(XNode parent)
+     alt is package
+     XMLConfigBuilder->>XMLConfigBuilder: configuration.addMappers(mapperPackage)
+     else is resource
+     XMLConfigBuilder->>XMLConfigBuilder: XMLMapperBuilder(resource) 
+     else is url
+     XMLConfigBuilder->>XMLConfigBuilder: XMLMapperBuilder(url) 
+     else is class
+     XMLConfigBuilder->>XMLConfigBuilder: configuration.addMapper(mapperInterface)
+     end
+     XMLConfigBuilder-->>SqlSessionFactoryBuilder: return Configuration
+     SqlSessionFactoryBuilder->>SqlSessionFactoryBuilder: build(Configuration config)
+     SqlSessionFactoryBuilder-->>SqlSessionFactory: return DefaultSqlSessionFactory
 </div>
 
 **sqlSessionFactory.openSession**
-<script src="/assets/js/mermaid.min.js"></script>
+
 <div class="mermaid">
 sequenceDiagram
-sqlSessionFactory->>sqlSessionFactory: openSession
-sqlSessionFactory->>DefaultSqlSessionFactory: openSession
-DefaultSqlSessionFactory->>DefaultSqlSessionFactory: openSessionFromDataSource
-DefaultSqlSessionFactory->>Configuration: getEnvironment()
-Configuration-->>DefaultSqlSessionFactory: return Environment
-DefaultSqlSessionFactory->>DefaultSqlSessionFactory: getTransactionFactoryFromEnvironment(environment)
-DefaultSqlSessionFactory->>DefaultSqlSessionFactory: transactionFactory.newTransaction(environment.getDataSource(), level, autoCommit)
-DefaultSqlSessionFactory->>Configuration: newExecutor(tx, execType)
-alt is BATCH
-Configuration-->>DefaultSqlSessionFactory: return BatchExecutor
-else is REUSE
-Configuration-->>DefaultSqlSessionFactory: return ReuseExecutor
-else is SIMPLE
-Configuration-->>DefaultSqlSessionFactory: return SimpleExecutor
-end
-alt is cacheEnabled
-Configuration-->>DefaultSqlSessionFactory: return CachingExecutor
-else is not cacheEnabled
-Configuration-->>DefaultSqlSessionFactory: return SimpleExecutor
-end
-DefaultSqlSessionFactory->>sqlSessionFactory: return DefaultSqlSession
+    sqlSessionFactory->>sqlSessionFactory: openSession
+    sqlSessionFactory->>DefaultSqlSessionFactory: openSession
+    DefaultSqlSessionFactory->>DefaultSqlSessionFactory: openSessionFromDataSource
+    DefaultSqlSessionFactory->>Configuration: getEnvironment()
+    Configuration-->>DefaultSqlSessionFactory: return Environment
+    DefaultSqlSessionFactory->>DefaultSqlSessionFactory: getTransactionFactoryFromEnvironment(environment)
+    DefaultSqlSessionFactory->>DefaultSqlSessionFactory: transactionFactory.newTransaction(environment.getDataSource(), level, autoCommit)
+    DefaultSqlSessionFactory->>Configuration: newExecutor(tx, execType)
+    alt is BATCH
+    Configuration-->>DefaultSqlSessionFactory: return BatchExecutor
+    else is REUSE
+    Configuration-->>DefaultSqlSessionFactory: return ReuseExecutor
+    else is SIMPLE
+    Configuration-->>DefaultSqlSessionFactory: return SimpleExecutor
+    end
+    alt is cacheEnabled
+    Configuration-->>DefaultSqlSessionFactory: return CachingExecutor
+    else is not cacheEnabled
+    Configuration-->>DefaultSqlSessionFactory: return SimpleExecutor
+    end
+    DefaultSqlSessionFactory->>sqlSessionFactory: return DefaultSqlSession
 </div>
 
+<div class="mermaid">
+sequenceDiagram
+    A->> B: Query
+    B->> C: Forward query
+    Note right of C: Thinking...
+    C->> B: Response
+    B->> A: Forward response
+</div>
