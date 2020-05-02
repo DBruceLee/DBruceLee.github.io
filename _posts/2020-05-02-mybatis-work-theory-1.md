@@ -83,8 +83,7 @@ keywords: theory、mybatis
 #### 一级缓存写入删除流程
 
 
-<script src="/assets/js/mermaid.min.js"></script>
-<div class="mermaid">
+```mermaid
 graph TB
 A(sqlSession.selectOne)-->B[DefaultSqlSession.selectOne]
 	B-->C[this.selectList]
@@ -97,7 +96,7 @@ A(sqlSession.selectOne)-->B[DefaultSqlSession.selectOne]
 	I-->J[将数据写入缓存]
 	J-->K[返回数据]
 	H-->K
-</div>
+```
 
 **每次增删改的时候，会清除一级缓存**
 
