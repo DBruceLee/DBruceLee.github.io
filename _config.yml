@@ -135,5 +135,3 @@ google:
 
 theme: jekyll-theme-slate
 #gems: jekyll-mermaid
-mermaid:
-  src: /assets/js/mermaid.min.js
