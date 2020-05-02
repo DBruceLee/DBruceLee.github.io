@@ -19,12 +19,52 @@ keywords: mybatis、theory
 
 
 
-**SqlSessionFactoryBuilder().build(stream)**
-
 <script src="/assets/js/mermaid.min.js"></script>
-
-
-**sqlSessionFactory.openSession**
+<div class="mermaid">
+sequenceDiagram
+  SqlSessionFactory->>SqlSessionFactoryBuilder: bulid
+  SqlSessionFactoryBuilder->>XMLConfigBuilder: bulid
+  XMLConfigBuilder->>XMLConfigBuilder: parse()
+  XMLConfigBuilder->>Configuration: parseConfiguration(XNode root)
+  Configuration->>Configuration: setVariables()
+  Configuration-->>XMLConfigBuilder: return
+  XMLConfigBuilder->>Configuration: settingsAsProperties("settings")
+  Configuration->>Configuration: metaConfig.hasSetter()
+  Configuration-->>XMLConfigBuilder: return Properties
+  XMLConfigBuilder->>XMLConfigBuilder: loadCustomVfs(settings)
+  XMLConfigBuilder->>XMLConfigBuilder: loadCustomLogImpl(settings)
+  XMLConfigBuilder->>XMLConfigBuilder: typeAliasesElement("typeAliases")
+  XMLConfigBuilder->>TypeAliasRegistry: registerAlias() 
+  TypeAliasRegistry-->>XMLConfigBuilder: return
+  XMLConfigBuilder->>XMLConfigBuilder: pluginElement("plugins")
+  XMLConfigBuilder->>XMLConfigBuilder: objectFactoryElement("objectFactory")
+  XMLConfigBuilder->>XMLConfigBuilder: objectWrapperFactoryElement("objectWrapperFactory")
+  XMLConfigBuilder->>XMLConfigBuilder: reflectorFactoryElement("reflectorFactory")
+  XMLConfigBuilder->>XMLConfigBuilder: settingsElement(settings)
+  XMLConfigBuilder->>Configuration: environmentsElement("environments")
+  Configuration->>Configuration: configuration.setEnvironment()
+  Configuration-->>XMLConfigBuilder: return
+ XMLConfigBuilder->>XMLConfigBuilder: databaseIdProviderElement("databaseIdProvider")
+ XMLConfigBuilder->>XMLConfigBuilder: typeHandlerElement("typeHandlers")
+ alt is package
+ XMLConfigBuilder->>XMLConfigBuilder: typeHandlerRegistry.register(typeHandlerPackage)
+ else is class
+ XMLConfigBuilder->>XMLConfigBuilder: typeHandlerRegistry.register(typeHandlerClass)
+ end
+ XMLConfigBuilder->>XMLConfigBuilder: mapperElement(XNode parent)
+ alt is package
+ XMLConfigBuilder->>XMLConfigBuilder: configuration.addMappers(mapperPackage)
+ else is resource
+ XMLConfigBuilder->>XMLConfigBuilder: XMLMapperBuilder(resource) 
+ else is url
+ XMLConfigBuilder->>XMLConfigBuilder: XMLMapperBuilder(url) 
+ else is class
+ XMLConfigBuilder->>XMLConfigBuilder: configuration.addMapper(mapperInterface)
+ end
+ XMLConfigBuilder-->>SqlSessionFactoryBuilder: return Configuration
+ SqlSessionFactoryBuilder->>SqlSessionFactoryBuilder: build(Configuration config)
+ SqlSessionFactoryBuilder-->>SqlSessionFactory: return DefaultSqlSessionFactory
+</div>
 
 <div class="mermaid">
 sequenceDiagram
