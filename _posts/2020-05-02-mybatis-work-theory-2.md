@@ -17,8 +17,6 @@ keywords: mybatis、theory
 3. 代理
 4. 拦截器
 
-
-
 **SqlSessionFactoryBuilder().build(stream)**
 
 ```mermaid
@@ -28,10 +26,10 @@ sequenceDiagram
   XMLConfigBuilder->>XMLConfigBuilder: parse()
   XMLConfigBuilder->>Configuration: parseConfiguration(XNode root)
   Configuration->>Configuration: setVariables()
-  Configuration-->>XMLConfigBuilder: return void
+  Configuration-->>XMLConfigBuilder: return
   XMLConfigBuilder->>Configuration: settingsAsProperties("settings")
   Configuration->>Configuration: metaConfig.hasSetter()
-  Configuration-->>XMLConfigBuilder: return properties
+  Configuration-->>XMLConfigBuilder: return Properties
   XMLConfigBuilder->>XMLConfigBuilder: loadCustomVfs(settings)
   XMLConfigBuilder->>XMLConfigBuilder: loadCustomLogImpl(settings)
   XMLConfigBuilder->>XMLConfigBuilder: typeAliasesElement("typeAliases")
@@ -94,4 +92,71 @@ end
 DefaultSqlSessionFactory->>sqlSessionFactory: return DefaultSqlSession
 
 ```
+
+**sqlSession.getMapper()**
+
+```mermaid
+sequenceDiagram
+	businessCode->>sqlSession: getMapper()
+	sqlSession->>Configuration: getMapper()
+	Configuration->>MapperRegistry: getMapper()
+	MapperRegistry->>MapperRegistry: knownMappers.get();
+	Note over MapperRegistry: 获取mapperProxyFactory代理对象
+	MapperRegistry->>MapperProxyFactory: newInstance(sqlSession)
+	MapperProxyFactory->>MapperProxyFactory: newInstance(mapperProxy)
+	MapperProxyFactory-->>MapperRegistry: return MapperProxy 对象
+	MapperRegistry-->> Configuration: return MapperProxy 对象
+	Configuration-->>sqlSession: return MapperProxy 对象
+	sqlSession-->>businessCode: return MaperProxy 对象
+```
+
+**mapper.selectOne()**
+
+```mermaid
+sequenceDiagram
+	businessCode->> mapperProxy: selectOne
+	mapperProxy-> mapperProxy: invoke
+	alt is getDeclaringClass
+	mapperProxy->> mapperProxy: method.invoke()
+	else is not
+	mapperProxy->>MapperMethodInvoker: cachedInvoker()
+	alt isDefault ?
+	MapperMethodInvoker->>MapperMethodInvoker: DefaultMethodInvoker.invoke()
+	else not default
+	MapperMethodInvoker->>PlainMethodInvoker: invoke()
+	PlainMethodInvoker->>MapperMethod: excute()
+	alt is INSERT
+	MapperMethod->>sqlSession: insert
+	else is UPDATE
+	MapperMethod->>sqlSession: update
+	else is DELETE
+	MapperMethod->>sqlSession: delete
+	else is SELECT
+	MapperMethod->>sqlSession: select
+	sqlSession->>sqlSession: selectList
+	sqlSession->>sqlSession: configuration.getMappedStatement
+	sqlSession->>cacheExecutor: query
+	alt open Cache?
+	cacheExecutor->>cacheExecutor: TransactionalCacheManager.getObject
+	alt cache have data?
+	cacheExecutor-->>sqlSession: return cache data
+	else no cache data
+	Note over cacheExecutor: find data from DB
+	cacheExecutor->>cacheExecutor: save data to cache
+	end
+	else no open cache
+	sqlSession->>baseExecutor: query
+	Note over baseExecutor: first find cache
+	baseExecutor->>baseExecutor: queryFromDB
+	baseExecutor->>baseExecutor: save data to cache
+	end
+	else is FLUSH
+	MapperMethod->>sqlSession: flushStatements
+	end
+	end
+	mapperProxy->>mapperProxy: invoke()
+	end
+```
+
+
 
